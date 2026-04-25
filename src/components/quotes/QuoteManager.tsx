@@ -636,86 +636,87 @@ const QuoteManagerInner: React.FC = () => {
 
   return (
     <div className="space-y-6">
-      <div className="flex justify-between items-center glass-panel rounded-2xl p-5 backdrop-blur-xl bg-black/40 border border-white/10 shadow-xl">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 glass-panel rounded-2xl p-5 backdrop-blur-xl bg-black/40 border border-white/10 shadow-xl">
         <div className="flex items-center gap-3">
-          <FileText className="text-[#00A3E0]" />
-          <h2 className="text-xl font-mono font-bold uppercase tracking-widest text-shadow-neon">Cotizaciones</h2>
+          <div className="w-10 h-10 rounded-xl bg-[#00A3E0]/10 flex items-center justify-center border border-[#00A3E0]/20">
+            <FileText className="text-[#00A3E0]" size={20} />
+          </div>
+          <div>
+            <h2 className="text-xl font-mono font-bold uppercase tracking-widest text-shadow-neon">Cotizaciones</h2>
+            <p className="text-[9px] font-mono text-gray-500 uppercase tracking-[0.2em]">Centro de Operaciones</p>
+          </div>
         </div>
-        <CyberButton onClick={handleNewQuoteClick}>
-          <span className="flex items-center gap-2"><Plus size={16} /> Generar Cotización</span>
+        <CyberButton onClick={handleNewQuoteClick} className="w-full md:w-auto">
+          <span className="flex items-center justify-center gap-2 font-bold uppercase tracking-tighter"><Plus size={16} /> Nueva Cotización</span>
         </CyberButton>
       </div>
 
-      <div className="glass-panel overflow-hidden rounded-2xl p-4 backdrop-blur-xl bg-black/40 border border-white/10 shadow-xl">
+      {/* Desktop Table View */}
+      <div className="hidden md:block glass-panel overflow-hidden rounded-2xl p-4 backdrop-blur-xl bg-black/40 border border-white/10 shadow-xl">
         <table className="w-full text-left font-mono text-sm border-separate" style={{ borderSpacing: '0 0.75rem' }}>
           <thead className="text-[#00A3E0] text-[10px] uppercase tracking-widest font-medium">
             <tr>
-              <th className="px-4 pb-2">Número</th>
+              <th className="px-4 pb-2">Terminal</th>
               <th className="px-4 pb-2">Fecha</th>
               <th className="px-4 pb-2">Cliente</th>
               <th className="px-4 pb-2">Total</th>
               <th className="px-4 pb-2">Estado</th>
-              <th className="px-4 pb-2 text-center">Archivo</th>
+              <th className="px-4 pb-2 text-center">Documentos</th>
               <th className="px-4 pb-2 text-center">Acciones</th>
             </tr>
           </thead>
           <tbody>
             {loading ? (
               <tr>
-                <td colSpan={7} className="p-12 text-center bg-white/5 rounded-xl border border-white/5">
-                  <div className="flex flex-col items-center justify-center gap-4">
-                    <Loader2 className="w-10 h-10 text-[#00A3E0] animate-spin" />
-                    <p className="text-[10px] font-mono text-[#00A3E0] uppercase tracking-[0.4em] animate-pulse">Sincronizando Historial...</p>
-                  </div>
+                <td colSpan={7} className="p-12 text-center bg-white/5 rounded-xl">
+                  <Loader2 className="w-8 h-8 text-[#00A3E0] animate-spin mx-auto mb-2" />
+                  <span className="text-[10px] uppercase tracking-widest text-[#00A3E0]/60">Sincronizando Terminal...</span>
                 </td>
               </tr>
             ) : quotes.length === 0 ? (
-              <tr><td colSpan={7} className="p-8 text-center text-gray-500 bg-white/5 rounded-xl">No hay cotizaciones registradas.</td></tr>
+              <tr><td colSpan={7} className="p-8 text-center text-gray-500 bg-white/5 rounded-xl">No hay registros activos.</td></tr>
             ) : (
               quotes.map(q => (
                 <tr 
                   key={q.id} 
-                  className={`bg-white/5 transition-all duration-300 group shadow-md border-y border-white/5 ${
+                  className={`bg-white/5 transition-all duration-300 group shadow-md border-y border-white/5 transform hover:scale-[1.005] ${
                     q.estado === 'Aceptada' 
                       ? 'opacity-80 cursor-default' 
-                      : 'hover:bg-white/10 hover:shadow-[0_4px_20px_rgba(0,163,224,0.15)] transform hover:scale-[1.01] cursor-pointer'
+                      : 'hover:bg-white/10 cursor-pointer'
                   }`}
                   onClick={() => q.estado !== 'Aceptada' && handleEditQuote(q)}
                 >
-                  <td className="p-4 text-white font-medium rounded-l-xl border-y border-l border-white/5 group-hover:border-[#00A3E0]/30 transition-colors">{q.numero || '#0000'}</td>
-                  <td className="p-4 text-gray-400 border-y border-white/5 group-hover:border-[#00A3E0]/30 transition-colors">{q.fecha}</td>
-                  <td className="p-4 font-medium text-white border-y border-white/5 group-hover:border-[#00A3E0]/30 transition-colors">{q.cliente?.nombre}</td>
-                  <td className="p-4 text-[#00A3E0] font-medium border-y border-white/5 group-hover:border-[#00A3E0]/30 transition-colors">${Number(q.total).toLocaleString('es-CO')}</td>
-                  <td className="p-4 border-y border-white/5 group-hover:border-[#00A3E0]/30 transition-colors">
+                  <td className="p-4 text-white font-bold rounded-l-xl border-y border-l border-white/5 group-hover:border-[#00A3E0]/30">{q.numero || '#0000'}</td>
+                  <td className="p-4 text-gray-400 border-y border-white/5 group-hover:border-[#00A3E0]/30">{q.fecha}</td>
+                  <td className="p-4 font-medium text-white border-y border-white/5 group-hover:border-[#00A3E0]/30">{q.cliente?.nombre}</td>
+                  <td className="p-4 text-[#00A3E0] font-black border-y border-white/5 group-hover:border-[#00A3E0]/30">${Number(q.total).toLocaleString('es-CO')}</td>
+                  <td className="p-4 border-y border-white/5 group-hover:border-[#00A3E0]/30">
                     <button
                       onClick={(e) => handleToggleEstado(e, q)}
-                      className={`px-3 py-1.5 text-[10px] rounded-full border transition-all duration-300 flex items-center gap-1.5 ${
-                        q.estado === 'Pendiente' ? 'bg-[#ffb800]/10 text-[#ffb800] border-[#ffb800]/30 hover:bg-[#ffb800]/20 cursor-pointer hover:scale-105' : 
-                        q.estado === 'Aceptada' ? 'bg-[#39ff8f]/10 text-[#39ff8f] border-[#39ff8f]/30 cursor-default' : 
-                        'bg-red-500/10 text-red-400 border-red-500/30 hover:bg-red-500/20 cursor-pointer hover:scale-105'
+                      className={`px-3 py-1.5 text-[10px] rounded-full border transition-all flex items-center gap-1.5 font-bold uppercase tracking-tighter ${
+                        q.estado === 'Pendiente' ? 'bg-[#ffb800]/10 text-[#ffb800] border-[#ffb800]/30 hover:bg-[#ffb800]/20' : 
+                        q.estado === 'Aceptada' ? 'bg-[#39ff8f]/10 text-[#39ff8f] border-[#39ff8f]/30' : 
+                        'bg-red-500/10 text-red-400 border-red-500/30 hover:bg-red-500/20'
                       }`}
-                      title={q.estado === 'Aceptada' ? "Cotización Aceptada (Bloqueada)" : "Clic para aceptar cotización"}
                     >
                       {q.estado !== 'Aceptada' && <ArrowRightLeft size={10} />}
                       {q.estado}
                     </button>
                   </td>
-                  <td className="p-4 text-center border-y border-white/5 group-hover:border-[#00A3E0]/30 transition-colors">
-                    <div className="grid grid-cols-2 gap-2 w-[4.5rem]">
-                      {/* Cotización PDF dropdown */}
+                  <td className="p-4 text-center border-y border-white/5 group-hover:border-[#00A3E0]/30">
+                    <div className="flex items-center justify-center gap-2">
                       <div className="relative">
                         <button 
                           onClick={(e) => { e.stopPropagation(); setActiveDropdown(activeDropdown === `cot-${q.id}` ? null : `cot-${q.id}`); }}
                           onBlur={() => setTimeout(() => setActiveDropdown(null), 200)}
-                          className="w-8 h-8 rounded-lg bg-black/40 flex items-center justify-center text-[#00A3E0] border border-[#00A3E0]/20 hover:bg-[#00A3E0] hover:text-white transition-all duration-300 hover:shadow-[0_0_15px_rgba(0,163,224,0.5)]"
-                          title="Cotización PDF"
+                          className="w-8 h-8 rounded-lg bg-black/40 flex items-center justify-center text-[#00A3E0] border border-[#00A3E0]/20 hover:bg-[#00A3E0] hover:text-white transition-all"
                         >
                           <FileText size={14} />
                         </button>
                         {activeDropdown === `cot-${q.id}` && (
                           <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 bg-[#0f172a] border border-[#00A3E0]/30 rounded-xl shadow-2xl z-50 overflow-hidden min-w-[10rem]">
                             <button
-                              className="w-full px-4 py-2.5 text-left text-xs font-mono text-white hover:bg-[#00A3E0]/20 flex items-center gap-2 transition-colors"
+                              className="w-full px-4 py-2.5 text-left text-[10px] font-mono text-white hover:bg-[#00A3E0]/20 flex items-center gap-2 uppercase tracking-widest"
                               onClick={(e) => {
                                 e.stopPropagation();
                                 setActiveDropdown(null);
@@ -724,69 +725,25 @@ const QuoteManagerInner: React.FC = () => {
                                 generatePDF(q, pdfWindow);
                               }}
                             >
-                              <Eye size={12} className="text-[#00A3E0]" /> Ver Cotización
-                            </button>
-                            <button
-                              className="w-full px-4 py-2.5 text-left text-xs font-mono text-white hover:bg-[#00A3E0]/20 flex items-center gap-2 transition-colors border-t border-white/5"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                setActiveDropdown(null);
-                                generatePDF(q, null);
-                              }}
-                            >
-                              <Download size={12} className="text-[#00A3E0]" /> Descargar
+                              <Eye size={12} /> Ver
                             </button>
                           </div>
                         )}
                       </div>
-                      {/* Factura PDF dropdown */}
-                      {q.estado === 'Aceptada' ? (
-                        <div className="relative">
-                          <button 
-                            onClick={(e) => { e.stopPropagation(); setActiveDropdown(activeDropdown === `fac-${q.id}` ? null : `fac-${q.id}`); }}
-                            onBlur={() => setTimeout(() => setActiveDropdown(null), 200)}
-                            className="w-8 h-8 rounded-lg bg-black/40 flex items-center justify-center text-[#39ff8f] border border-[#39ff8f]/20 hover:bg-[#39ff8f] hover:text-black transition-all duration-300 hover:shadow-[0_0_15px_rgba(57,255,143,0.5)]"
-                            title="Factura de Venta"
-                          >
-                            <DollarSign size={14} />
-                          </button>
-                          {activeDropdown === `fac-${q.id}` && (
-                            <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 bg-[#0f172a] border border-[#39ff8f]/30 rounded-xl shadow-2xl z-50 overflow-hidden min-w-[10rem]">
-                              <button
-                                className="w-full px-4 py-2.5 text-left text-xs font-mono text-white hover:bg-[#39ff8f]/20 flex items-center gap-2 transition-colors"
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  setActiveDropdown(null);
-                                  const pdfWindow = window.open('', '_blank');
-                                  if (pdfWindow) pdfWindow.document.write('<div style="font-family: monospace; padding: 40px; background: #050505; color: #39ff8f; height: 100vh; display: flex; align-items: center; justify-content: center; font-size: 1.5rem;">Generando Factura...</div>');
-                                  generatePDF(q, pdfWindow, { isInvoice: true });
-                                }}
-                              >
-                                <Eye size={12} className="text-[#39ff8f]" /> Ver Factura
-                              </button>
-                              <button
-                                className="w-full px-4 py-2.5 text-left text-xs font-mono text-white hover:bg-[#39ff8f]/20 flex items-center gap-2 transition-colors border-t border-white/5"
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  setActiveDropdown(null);
-                                  generatePDF(q, null, { isInvoice: true });
-                                }}
-                              >
-                                <Download size={12} className="text-[#39ff8f]" /> Descargar
-                              </button>
-                            </div>
-                          )}
-                        </div>
-                      ) : (
-                        <div className="w-8 h-8" />
+                      {q.estado === 'Aceptada' && (
+                        <button 
+                          onClick={(e) => { e.stopPropagation(); generatePDF(q, null, { isInvoice: true }); }}
+                          className="w-8 h-8 rounded-lg bg-black/40 flex items-center justify-center text-[#39ff8f] border border-[#39ff8f]/20 hover:bg-[#39ff8f] hover:text-black transition-all"
+                        >
+                          <DollarSign size={14} />
+                        </button>
                       )}
                     </div>
                   </td>
-                  <td className="p-4 text-center rounded-r-xl border-y border-r border-white/5 group-hover:border-[#00A3E0]/30 transition-colors">
+                  <td className="p-4 text-center rounded-r-xl border-y border-r border-white/5 group-hover:border-[#00A3E0]/30">
                     <button 
                       onClick={(e) => handleDeleteQuote(e, q.id)}
-                      className="w-8 h-8 mx-auto rounded-lg bg-black/40 flex items-center justify-center text-red-400 border border-red-500/20 hover:bg-red-500 hover:text-white transition-all duration-300 hover:shadow-[0_0_15px_rgba(239,68,68,0.5)]"
-                      title="Eliminar cotización"
+                      className="w-8 h-8 mx-auto rounded-lg bg-black/40 flex items-center justify-center text-red-400 border border-red-500/20 hover:bg-red-500 hover:text-white transition-all"
                     >
                       <Trash2 size={14} />
                     </button>
@@ -796,6 +753,69 @@ const QuoteManagerInner: React.FC = () => {
             )}
           </tbody>
         </table>
+      </div>
+
+      {/* Mobile Card View */}
+      <div className="md:hidden space-y-4">
+        {loading ? (
+          <div className="p-12 text-center glass-panel rounded-2xl">
+            <Loader2 className="w-8 h-8 text-[#00A3E0] animate-spin mx-auto mb-2" />
+            <p className="text-[10px] font-mono text-[#00A3E0]/60 uppercase tracking-widest">Enlace Satelital...</p>
+          </div>
+        ) : quotes.length === 0 ? (
+          <div className="p-8 text-center text-gray-500 glass-panel rounded-2xl">No hay registros activos.</div>
+        ) : (
+          quotes.map(q => (
+            <div 
+              key={q.id} 
+              className={`glass-panel rounded-2xl p-5 border relative overflow-hidden group ${q.estado === 'Aceptada' ? 'bg-[#39ff8f]/5 border-[#39ff8f]/10' : 'bg-black/60 border-white/5'}`}
+              onClick={() => q.estado !== 'Aceptada' && handleEditQuote(q)}
+            >
+              <div className="flex justify-between items-start mb-4">
+                <div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-white font-black font-mono text-base">{q.numero || '#0000'}</span>
+                    <span className={`px-2 py-0.5 text-[8px] font-mono uppercase rounded-full border ${
+                      q.estado === 'Pendiente' ? 'bg-[#ffb800]/10 text-[#ffb800] border-[#ffb800]/20' : 
+                      q.estado === 'Aceptada' ? 'bg-[#39ff8f]/10 text-[#39ff8f] border-[#39ff8f]/20' : 
+                      'bg-red-500/10 text-red-400 border-red-500/20'
+                    }`}>{q.estado}</span>
+                  </div>
+                  <h3 className="text-gray-300 font-bold font-mono text-sm mt-1 uppercase truncate max-w-[200px]">{q.cliente?.nombre}</h3>
+                </div>
+                <button 
+                  onClick={(e) => { e.stopPropagation(); generatePDF(q, null); }}
+                  className="p-3 rounded-xl bg-[#00A3E0]/10 text-[#00A3E0] border border-[#00A3E0]/20"
+                >
+                  <Download size={18} />
+                </button>
+              </div>
+
+              <div className="flex justify-between items-end mt-6 pt-4 border-t border-white/5">
+                <div>
+                  <p className="text-[8px] font-mono text-gray-500 uppercase tracking-widest">Total Operación</p>
+                  <p className="text-lg font-black font-mono text-[#00A3E0]">${Number(q.total).toLocaleString('es-CO')}</p>
+                </div>
+                <div className="flex gap-2">
+                  {q.estado === 'Aceptada' && (
+                    <button 
+                      onClick={(e) => { e.stopPropagation(); generatePDF(q, null, { isInvoice: true }); }}
+                      className="p-3 rounded-xl bg-[#39ff8f]/10 text-[#39ff8f] border border-[#39ff8f]/20 shadow-[0_0_10px_rgba(57,255,143,0.2)]"
+                    >
+                      <DollarSign size={18} />
+                    </button>
+                  )}
+                  <button 
+                    onClick={(e) => handleDeleteQuote(e, q.id)}
+                    className="p-3 rounded-xl bg-red-500/10 text-red-400 border border-red-500/20"
+                  >
+                    <Trash2 size={18} />
+                  </button>
+                </div>
+              </div>
+            </div>
+          ))
+        )}
       </div>
 
       <CyberModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title={selectedQuoteId ? `Editar Cotización ${quotes.find(q=>q.id===selectedQuoteId)?.numero || ''}` : "Generar Cotización"}>

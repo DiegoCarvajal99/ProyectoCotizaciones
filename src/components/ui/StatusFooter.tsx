@@ -41,12 +41,13 @@ export const StatusFooter: React.FC = () => {
           <div className="w-1.5 h-1.5 bg-[#39ff8f] rounded-full animate-pulse shadow-[0_0_8px_rgba(57,255,143,0.8)]" />
           <span className="text-[10px] font-mono text-[#39ff8f] font-bold tracking-widest">SYSTEM_ONLINE</span>
         </div>
-        <div className="flex items-center gap-4 text-[10px] font-mono text-gray-500 uppercase">
+        <div className="hidden md:flex items-center gap-4 text-[10px] font-mono text-gray-500 uppercase">
           <div className="flex gap-1.5"><span>PRV:</span><span className="text-[#00A3E0]">{counts.PRV}</span></div>
           <div className="flex gap-1.5"><span>PRD:</span><span className="text-[#00A3E0]">{counts.PRD}</span></div>
           <div className="flex gap-1.5"><span>CLI:</span><span className="text-[#00A3E0]">{counts.CLI}</span></div>
           <div className="flex gap-1.5"><span>COT:</span><span className="text-[#00A3E0]">{counts.COT}</span></div>
         </div>
+
       </div>
       
       <div className="flex items-center gap-4">

@@ -4,9 +4,10 @@ import { ProtectedRoute } from './ProtectedRoute';
 import { Sidebar } from '../Sidebar';
 import { StatusFooter } from '../ui/StatusFooter';
 import { useAuth } from './AuthContext';
-import { Sun, Moon, Sunrise, Clock, AlertTriangle, ShieldAlert } from 'lucide-react';
+import { Sun, Moon, Sunrise, Clock, AlertTriangle, ShieldAlert, Menu, X } from 'lucide-react';
 import { CyberModal } from '../ui/CyberModal';
 import { CyberButton } from '../ui/CyberButton';
+import { BottomNav } from '../ui/BottomNav';
 
 interface AuthWrapperProps {
   children: React.ReactNode;
@@ -59,7 +60,7 @@ const HeaderContent: React.FC<{ displayTitle: string; currentPath: string }> = (
   const userName = profile?.empresa || profile?.email?.split('@')[0] || 'Usuario';
 
   return (
-    <header className="mb-12">
+    <header className="mb-8 lg:mb-12">
       <div className="flex flex-col gap-1">
         <div className="flex items-center justify-between animate-in fade-in slide-in-from-top-4 duration-1000">
           
@@ -70,7 +71,7 @@ const HeaderContent: React.FC<{ displayTitle: string; currentPath: string }> = (
                 <span className="text-[9px] font-mono text-gray-500 uppercase tracking-widest mb-1">Terminal / Activa</span>
                 <div className="flex items-center gap-3">
                   <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-                  <span className="text-sm font-mono font-bold text-white uppercase tracking-tight">
+                  <span className="text-xs lg:text-sm font-mono font-bold text-white uppercase tracking-tight">
                     {greeting.text}, <span className="text-[#00A3E0]">{userName}</span>
                   </span>
                 </div>
@@ -78,14 +79,14 @@ const HeaderContent: React.FC<{ displayTitle: string; currentPath: string }> = (
             ) : (
               <div className="flex items-center gap-2 opacity-50">
                 <div className="w-1.5 h-1.5 bg-[#00A3E0]"></div>
-                <span className="text-[9px] font-mono text-[#00A3E0] uppercase tracking-[0.3em]">MT_SYS / {currentPath.replace('/', '') || 'Dashboard'}</span>
+                <span className="text-[8px] lg:text-[9px] font-mono text-[#00A3E0] uppercase tracking-[0.3em]">MT_SYS / {currentPath.replace('/', '') || 'Dashboard'}</span>
               </div>
             )}
           </div>
 
           {/* Expiration Block (Right Side) - Hidden for Admins */}
           {profile?.accessExpiration && profile.role !== 'admin' && (
-            <div className="flex flex-col items-end">
+            <div className="hidden sm:flex flex-col items-end">
               <span className="text-[8px] font-mono text-gray-500 uppercase tracking-widest">Membresía / Expira</span>
               <div className="flex items-center gap-2">
                 <span className={`text-[11px] font-mono font-bold ${expiration?.colorClass}`}>
@@ -159,25 +160,70 @@ const ExpiryReminder: React.FC = () => {
 };
 
 export const AuthWrapper: React.FC<AuthWrapperProps> = ({ children, requireAdmin = false, currentPath, title }) => {
+  const [isMenuOpen, setIsMenuOpen] = React.useState(false);
 
   return (
     <AuthProvider>
       <ProtectedRoute requireAdmin={requireAdmin}>
-        <div className="flex h-screen overflow-hidden custom-scrollbar">
-          <Sidebar currentPath={currentPath} />
+        <div className="flex h-screen overflow-hidden bg-[#0A0A0B]">
+          
+          {/* Mobile Drawer Overlay */}
+          {isMenuOpen && (
+            <div 
+              className="fixed inset-0 z-[60] bg-black/60 backdrop-blur-sm lg:hidden transition-all duration-300 animate-in fade-in"
+              onClick={() => setIsMenuOpen(false)}
+            />
+          )}
 
-          {/* Main Content */}
-          <main className="flex-1 relative overflow-y-auto custom-scrollbar pb-16 bg-[#080808] bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-[#00A3E0]/5 via-transparent to-transparent">
-            <div className="max-w-6xl mx-auto p-8">
-              <HeaderContent displayTitle={title} currentPath={currentPath} />
-              <ExpiryReminder />
-              {children}
+          {/* Sidebar - Handles both mobile drawer and desktop fixed state */}
+          <div className={`
+            fixed inset-y-0 left-0 z-[70] lg:relative lg:z-20 transition-transform duration-300 ease-out lg:translate-x-0
+            ${isMenuOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
+          `}>
+            <Sidebar currentPath={currentPath} isMobile={true} onClose={() => setIsMenuOpen(false)} />
+          </div>
+
+          <div className="flex-1 flex flex-col h-full overflow-hidden relative">
+            
+            {/* Mobile Header */}
+            <div className="lg:hidden h-16 bg-[#050505] border-b border-[#00A3E0]/10 flex items-center justify-between px-6 z-40">
+              <div className="flex items-center gap-2">
+                <div className="w-1.5 h-1.5 bg-[#00A3E0] rounded-sm rotate-45"></div>
+                <span className="font-black text-xl italic tracking-tighter text-white">
+                  MT<span className="text-[#00A3E0] text-shadow-neon">_SYS</span>
+                </span>
+              </div>
+
+              <div className="flex items-center gap-3">
+                <div className="flex flex-col items-end mr-2">
+                  <span className="text-[7px] font-mono text-[#00A3E0]/60 uppercase tracking-widest">Estado</span>
+                  <span className="text-[9px] font-mono text-green-500 uppercase font-bold tracking-tighter flex items-center gap-1">
+                    Online <div className="w-1 h-1 bg-green-500 rounded-full animate-pulse shadow-[0_0_4px_#39ff8f]"></div>
+                  </span>
+                </div>
+              </div>
             </div>
-          </main>
 
-          <StatusFooter />
+            {/* Main Content */}
+            <main className="flex-1 relative overflow-y-auto custom-scrollbar pb-32 lg:pb-8 bg-[#080808] bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-[#00A3E0]/5 via-transparent to-transparent">
+              <div className="max-w-6xl mx-auto p-4 lg:p-8">
+                <HeaderContent displayTitle={title} currentPath={currentPath} />
+                <ExpiryReminder />
+                <div className="animate-in fade-in slide-in-from-bottom-2 duration-700">
+                  {children}
+                </div>
+              </div>
+            </main>
+
+            <BottomNav currentPath={currentPath} onMenuClick={() => setIsMenuOpen(true)} />
+            
+            <div className="hidden lg:block">
+              <StatusFooter />
+            </div>
+          </div>
         </div>
       </ProtectedRoute>
     </AuthProvider>
   );
 };
+
