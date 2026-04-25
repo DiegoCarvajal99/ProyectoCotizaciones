@@ -1,0 +1,21 @@
+---
+import '../styles/global.css';
+import { Login } from '../components/auth/Login';
+import { AuthProvider } from '../components/auth/AuthContext';
+---
+
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="description" content="MT System Login" />
+		<meta name="viewport" content="width=device-width" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<title>Login | MT System</title>
+	</head>
+	<body>
+		<AuthProvider client:only="react">
+			<Login client:only="react" />
+		</AuthProvider>
+	</body>
+</html>

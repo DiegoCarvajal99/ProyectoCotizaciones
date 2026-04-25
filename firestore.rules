@@ -1,0 +1,43 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Función para verificar si el usuario es administrador
+    function isAdmin() {
+      return request.auth != null && 
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    }
+
+    // Reglas para la colección de Usuarios
+    match /users/{userId} {
+      // Cualquier usuario autenticado puede leer su propio perfil
+      allow read: if request.auth != null && request.auth.uid == userId;
+      // El Admin puede leer todos los perfiles y escribir en ellos (para renovar suscripciones)
+      allow read, write: if isAdmin();
+    }
+
+    // Reglas para colecciones de datos (Clientes, Proveedores, Cotizaciones, Productos)
+    // Se aplica aislamiento total mediante el campo ownerId
+    match /{collection}/{docId} {
+      // Permitir lectura si el usuario es el dueño del documento
+      allow read: if request.auth != null && resource.data.ownerId == request.auth.uid;
+      
+      // Permitir creación si el usuario se asigna a sí mismo como dueño
+      allow create: if request.auth != null && request.resource.data.ownerId == request.auth.uid;
+      
+      // Permitir actualización si el usuario es el dueño y no cambia el dueño
+      allow update: if request.auth != null && 
+                    resource.data.ownerId == request.auth.uid && 
+                    request.resource.data.ownerId == request.auth.uid;
+                    
+      // Permitir eliminación si el usuario es el dueño
+      allow delete: if request.auth != null && resource.data.ownerId == request.auth.uid;
+
+      // El Admin también puede gestionar estos documentos si es necesario para soporte, 
+      // pero manteniendo la regla de ownerId, el Admin tiene sus propios datos aislados.
+      // Si el Admin necesita ver TODO, se podría añadir: || isAdmin()
+      // Según el requerimiento: "Sus datos de pruebas deben estar aislados de los demás"
+      // Por lo tanto, el Admin actúa como un usuario normal para sus propios datos.
+    }
+  }
+}

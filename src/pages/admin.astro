@@ -1,0 +1,8 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { AdminDashboard } from '../components/admin/AdminDashboard';
+---
+
+<Layout title="Gestión de Usuarios" requireAdmin={true}>
+  <AdminDashboard client:only="react" />
+</Layout>

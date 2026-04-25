@@ -1,0 +1,8 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { ClientManager } from '../components/clients/ClientManager';
+---
+
+<Layout title="Clientes">
+  <ClientManager client:only="react" />
+</Layout>

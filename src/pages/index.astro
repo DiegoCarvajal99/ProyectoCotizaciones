@@ -1,0 +1,41 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Dashboard">
+  <div class="space-y-6">
+    <div class="flex justify-between items-center glass-panel rounded-2xl p-5 backdrop-blur-xl bg-black/40 border border-white/10 shadow-xl">
+      <div class="flex items-center gap-3">
+        <div class="w-2 h-2 bg-[#00A3E0] rounded-full animate-pulse"></div>
+        <h2 class="text-xl font-mono font-bold uppercase tracking-widest text-shadow-neon">Panel de Control</h2>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+    <div class="glass-panel p-8 flex flex-col justify-center items-center text-center gap-4 hover:border-[#00A3E0]/40 transition-colors">
+      <h3 class="text-xl font-mono text-[#00A3E0] uppercase tracking-widest text-shadow-neon">Proveedores</h3>
+      <p class="text-sm text-gray-400">Gestión de cadena de suministro y proveedores de hardware.</p>
+      <a href="/proveedores" class="btn-neon px-6 py-2 mt-2 font-mono text-xs text-[#00A3E0] border border-[#00A3E0]/30 hover:bg-[#00A3E0]/10 uppercase tracking-widest">Ingresar</a>
+    </div>
+    
+
+    <div class="glass-panel p-8 flex flex-col justify-center items-center text-center gap-4 hover:border-[#00A3E0]/40 transition-colors">
+      <h3 class="text-xl font-mono text-[#00A3E0] uppercase tracking-widest text-shadow-neon">Productos</h3>
+      <p class="text-sm text-gray-400">Inventario y catálogo base de productos/servicios.</p>
+      <a href="/productos" class="btn-neon px-6 py-2 mt-2 font-mono text-xs text-[#00A3E0] border border-[#00A3E0]/30 hover:bg-[#00A3E0]/10 uppercase tracking-widest">Ingresar</a>
+    </div>
+
+    <div class="glass-panel p-8 flex flex-col justify-center items-center text-center gap-4 hover:border-[#00A3E0]/40 transition-colors">
+      <h3 class="text-xl font-mono text-[#00A3E0] uppercase tracking-widest text-shadow-neon">Clientes</h3>
+      <p class="text-sm text-gray-400">Directorio maestro de clientes y contactos comerciales.</p>
+      <a href="/clientes" class="btn-neon px-6 py-2 mt-2 font-mono text-xs text-[#00A3E0] border border-[#00A3E0]/30 hover:bg-[#00A3E0]/10 uppercase tracking-widest">Ingresar</a>
+    </div>
+
+    <div class="glass-panel p-8 flex flex-col justify-center items-center text-center gap-4 hover:border-[#00A3E0]/40 transition-colors">
+      <h3 class="text-xl font-mono text-[#00A3E0] uppercase tracking-widest text-shadow-neon">Cotizaciones</h3>
+      <p class="text-sm text-gray-400">Generador dinámico de presupuestos y documentos.</p>
+      <a href="/cotizaciones" class="btn-neon px-6 py-2 mt-2 font-mono text-xs text-[#00A3E0] border border-[#00A3E0]/30 hover:bg-[#00A3E0]/10 uppercase tracking-widest">Ingresar</a>
+    </div>
+    </div>
+  </div>
+</Layout>

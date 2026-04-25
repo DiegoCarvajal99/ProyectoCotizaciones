@@ -1,0 +1,8 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { ProviderManager } from '../components/providers/ProviderManager';
+---
+
+<Layout title="Proveedores">
+  <ProviderManager client:only="react" />
+</Layout>

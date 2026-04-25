@@ -1,0 +1,55 @@
+---
+import '../styles/global.css';
+import { AuthProvider } from '../components/auth/AuthContext';
+import { ShieldAlert, Mail, ArrowLeft, LogOut } from 'lucide-react';
+---
+
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="description" content="MT System - Suscripción Vencida" />
+		<meta name="viewport" content="width=device-width" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<title>Suscripción Vencida | MT System</title>
+	</head>
+	<body class="bg-[#0A0A0B] text-white">
+		<AuthProvider client:only="react">
+      <div class="min-h-screen flex items-center justify-center p-4 relative overflow-hidden">
+        <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-red-500/5 rounded-full blur-[120px]"></div>
+        
+        <div class="w-full max-w-xl relative z-10 text-center">
+          <div class="glass-panel p-12 rounded-[3rem] border border-red-500/20 shadow-2xl backdrop-blur-xl">
+            <div class="flex flex-col items-center gap-8">
+              <div class="w-24 h-24 bg-red-500/10 rounded-[2rem] flex items-center justify-center border border-red-500/20 animate-pulse">
+                <ShieldAlert size={48} class="text-red-500" />
+              </div>
+              
+              <div class="space-y-4">
+                <h1 class="text-3xl font-black italic uppercase tracking-tighter text-white">Acceso Restringido</h1>
+                <p class="text-gray-400 font-mono text-sm uppercase tracking-widest max-w-md mx-auto leading-relaxed">
+                  Su suscripción al terminal <span class="text-red-500">MT_SYS</span> ha expirado. Por favor, contacte con el administrador para renovar su acceso.
+                </p>
+              </div>
+
+              <div class="w-full grid grid-cols-1 md:grid-cols-2 gap-4 mt-8">
+                <a href="mailto:diegoandres2015k@gmail.com" class="flex items-center justify-center gap-3 bg-white/5 hover:bg-white/10 border border-white/10 p-4 rounded-2xl font-mono text-xs uppercase tracking-widest transition-all">
+                  <Mail size={18} />
+                  Contactar Admin
+                </a>
+                <button onclick="localStorage.clear(); window.location.href='/login';" class="flex items-center justify-center gap-3 bg-red-500/10 hover:bg-red-500/20 border border-red-500/20 p-4 rounded-2xl font-mono text-xs uppercase tracking-widest transition-all text-red-500">
+                  <LogOut size={18} />
+                  Cerrar Sesión
+                </button>
+              </div>
+
+              <p class="text-[9px] font-mono text-gray-600 uppercase tracking-[0.4em] mt-8">
+                Quantum Logic Terminal Service v4.0.2
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+		</AuthProvider>
+	</body>
+</html>

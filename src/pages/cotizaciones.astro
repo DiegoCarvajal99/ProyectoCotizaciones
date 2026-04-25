@@ -1,0 +1,8 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { QuoteManager } from '../components/quotes/QuoteManager';
+---
+
+<Layout title="Cotizaciones">
+  <QuoteManager client:only="react" />
+</Layout>
