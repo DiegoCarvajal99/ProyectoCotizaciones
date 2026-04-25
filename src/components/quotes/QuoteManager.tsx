@@ -775,19 +775,27 @@ const QuoteManagerInner: React.FC = () => {
                 <div>
                   <div className="flex items-center gap-2">
                     <span className="text-white font-black font-mono text-base">{q.numero || '#0000'}</span>
-                    <span className={`px-2 py-0.5 text-[8px] font-mono uppercase rounded-full border ${
-                      q.estado === 'Pendiente' ? 'bg-[#ffb800]/10 text-[#ffb800] border-[#ffb800]/20' : 
-                      q.estado === 'Aceptada' ? 'bg-[#39ff8f]/10 text-[#39ff8f] border-[#39ff8f]/20' : 
-                      'bg-red-500/10 text-red-400 border-red-500/20'
-                    }`}>{q.estado}</span>
+                    <button
+                      onClick={(e) => { e.stopPropagation(); handleToggleEstado(e, q); }}
+                      className={`min-w-[100px] flex items-center justify-center gap-2 px-3 py-2 text-[10px] font-mono font-black uppercase tracking-widest rounded-xl border transition-all active:scale-90 shadow-lg ${
+                        q.estado === 'Pendiente' ? 'bg-[#ffb800]/10 text-[#ffb800] border-[#ffb800]/40 shadow-[0_0_15px_rgba(255,184,0,0.15)]' : 
+                        q.estado === 'Aceptada' ? 'bg-[#39ff8f]/10 text-[#39ff8f] border-[#39ff8f]/20 cursor-default' : 
+                        'bg-red-500/10 text-red-400 border-red-500/30 active:bg-red-500/40'
+                      }`}
+                      title={q.estado === 'Aceptada' ? "Bloqueada" : "Cambiar estado"}
+                    >
+                      {q.estado !== 'Aceptada' && <ArrowRightLeft size={12} className="shrink-0" />}
+                      <span>{q.estado}</span>
+                    </button>
                   </div>
                   <h3 className="text-gray-300 font-bold font-mono text-sm mt-1 uppercase truncate max-w-[200px]">{q.cliente?.nombre}</h3>
                 </div>
                 <button 
                   onClick={(e) => { e.stopPropagation(); generatePDF(q, null); }}
-                  className="p-3 rounded-xl bg-[#00A3E0]/10 text-[#00A3E0] border border-[#00A3E0]/20"
+                  className="p-3 rounded-xl bg-[#00A3E0]/10 text-[#00A3E0] border border-[#00A3E0]/20 shadow-[0_0_15px_rgba(0,163,224,0.1)] active:scale-95 transition-all"
+                  title="Ver Cotización"
                 >
-                  <Download size={18} />
+                  <FileText size={20} />
                 </button>
               </div>
 
@@ -800,9 +808,10 @@ const QuoteManagerInner: React.FC = () => {
                   {q.estado === 'Aceptada' && (
                     <button 
                       onClick={(e) => { e.stopPropagation(); generatePDF(q, null, { isInvoice: true }); }}
-                      className="p-3 rounded-xl bg-[#39ff8f]/10 text-[#39ff8f] border border-[#39ff8f]/20 shadow-[0_0_10px_rgba(57,255,143,0.2)]"
+                      className="p-3 rounded-xl bg-[#39ff8f]/10 text-[#39ff8f] border border-[#39ff8f]/20 shadow-[0_0_15px_rgba(57,255,143,0.2)] active:scale-95 transition-all"
+                      title="Ver Factura"
                     >
-                      <DollarSign size={18} />
+                      <DollarSign size={20} />
                     </button>
                   )}
                   <button 
