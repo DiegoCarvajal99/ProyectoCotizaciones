@@ -710,6 +710,7 @@ const QuoteManagerInner: React.FC = () => {
                           onClick={(e) => { e.stopPropagation(); setActiveDropdown(activeDropdown === `cot-${q.id}` ? null : `cot-${q.id}`); }}
                           onBlur={() => setTimeout(() => setActiveDropdown(null), 200)}
                           className="w-8 h-8 rounded-lg bg-black/40 flex items-center justify-center text-[#00A3E0] border border-[#00A3E0]/20 hover:bg-[#00A3E0] hover:text-white transition-all"
+                          title="Opciones de Cotización"
                         >
                           <FileText size={14} />
                         </button>
@@ -727,16 +728,56 @@ const QuoteManagerInner: React.FC = () => {
                             >
                               <Eye size={12} /> Ver
                             </button>
+                            <button
+                              className="w-full px-4 py-2.5 text-left text-[10px] font-mono text-white hover:bg-[#00A3E0]/20 flex items-center gap-2 uppercase tracking-widest"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setActiveDropdown(null);
+                                generatePDF(q, null);
+                              }}
+                            >
+                              <Download size={12} /> Descargar
+                            </button>
                           </div>
                         )}
                       </div>
                       {q.estado === 'Aceptada' && (
-                        <button 
-                          onClick={(e) => { e.stopPropagation(); generatePDF(q, null, { isInvoice: true }); }}
-                          className="w-8 h-8 rounded-lg bg-black/40 flex items-center justify-center text-[#39ff8f] border border-[#39ff8f]/20 hover:bg-[#39ff8f] hover:text-black transition-all"
-                        >
-                          <DollarSign size={14} />
-                        </button>
+                        <div className="relative">
+                          <button 
+                            onClick={(e) => { e.stopPropagation(); setActiveDropdown(activeDropdown === `inv-${q.id}` ? null : `inv-${q.id}`); }}
+                            onBlur={() => setTimeout(() => setActiveDropdown(null), 200)}
+                            className="w-8 h-8 rounded-lg bg-black/40 flex items-center justify-center text-[#39ff8f] border border-[#39ff8f]/20 hover:bg-[#39ff8f] hover:text-black transition-all"
+                            title="Opciones de Factura"
+                          >
+                            <DollarSign size={14} />
+                          </button>
+                          {activeDropdown === `inv-${q.id}` && (
+                            <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 bg-[#0f172a] border border-[#39ff8f]/30 rounded-xl shadow-2xl z-50 overflow-hidden min-w-[10rem]">
+                              <button
+                                className="w-full px-4 py-2.5 text-left text-[10px] font-mono text-white hover:bg-[#39ff8f]/20 flex items-center gap-2 uppercase tracking-widest"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  setActiveDropdown(null);
+                                  const pdfWindow = window.open('', '_blank');
+                                  if (pdfWindow) pdfWindow.document.write('<div style="font-family: monospace; padding: 40px; background: #050505; color: #39ff8f; height: 100vh; display: flex; align-items: center; justify-content: center; font-size: 1.5rem;">Generando Factura...</div>');
+                                  generatePDF(q, pdfWindow, { isInvoice: true });
+                                }}
+                              >
+                                <Eye size={12} /> Ver
+                              </button>
+                              <button
+                                className="w-full px-4 py-2.5 text-left text-[10px] font-mono text-white hover:bg-[#39ff8f]/20 flex items-center gap-2 uppercase tracking-widest"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  setActiveDropdown(null);
+                                  generatePDF(q, null, { isInvoice: true });
+                                }}
+                              >
+                                <Download size={12} /> Descargar
+                              </button>
+                            </div>
+                          )}
+                        </div>
                       )}
                     </div>
                   </td>
