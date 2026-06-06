@@ -22,7 +22,7 @@ const QuoteManagerInner: React.FC = () => {
   // Quote form state
   const [clientForm, setClientForm] = useState({ id: '', nombre: '', tipoDocumento: 'NIT', nit: '', direccion: '', ciudad: '', telefono: '' });
   const [showClientSuggestions, setShowClientSuggestions] = useState(false);
-  const [items, setItems] = useState([{ nombre: '', precio: 0, cantidad: 1, imagenUrl: '' }]);
+  const [items, setItems] = useState([{ nombre: '', precio: 0, cantidad: 1, imagenUrl: '', tipo: 'Producto' }]);
   const [products, setProducts] = useState<any[]>([]);
   const [activeProductRow, setActiveProductRow] = useState<number | null>(null);
   const [tipoPago, setTipoPago] = useState<'Contado' | 'Crédito'>('Contado');
