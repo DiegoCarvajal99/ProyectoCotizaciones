@@ -114,7 +114,7 @@ const QuoteManagerInner: React.FC = () => {
     const newItems = [...items];
     newItems[index] = { 
       ...newItems[index], 
-      nombre: product.nombre, 
+      nombre: (product.nombre || '').toUpperCase(), 
       precio: product.precioBase || 0,
       imagenUrl: product.imagenUrl || '',
       tipo: product.tipo || 'Producto'
@@ -237,8 +237,8 @@ const QuoteManagerInner: React.FC = () => {
       };
 
       const doc = new jsPDF();
-      const primary = [31, 54, 85]; // Navy blue
-      const light = [240, 242, 245]; // Light gray
+      const primary: [number, number, number] = [31, 54, 85]; // Navy blue
+      const light: [number, number, number] = [240, 242, 245]; // Light gray
       const pageHeight = doc.internal.pageSize.getHeight();
       
       // 1. Top Swooshes
@@ -1060,7 +1060,8 @@ const QuoteManagerInner: React.FC = () => {
                     className="w-full text-center"
                     required
                     value={item.nombre} 
-                    onChange={e => handleItemChange(index, 'nombre', e.target.value)} 
+                    onChange={e => handleItemChange(index, 'nombre', e.target.value.toUpperCase())} 
+                    style={{ textTransform: 'uppercase' }}
                     onFocus={() => setActiveProductRow(index)}
                     onBlur={() => setTimeout(() => setActiveProductRow(null), 200)}
                     autoComplete="off"
@@ -1074,7 +1075,7 @@ const QuoteManagerInner: React.FC = () => {
                             className="px-4 py-3 hover:bg-[#00A3E0]/20 cursor-pointer text-sm font-mono transition-colors flex justify-between border-b border-white/5 last:border-0"
                             onClick={() => handleSelectProduct(index, p)}
                           >
-                            <span className="font-bold text-white truncate pr-2">{p.nombre}</span>
+                            <span className="font-bold text-white truncate pr-2 uppercase">{p.nombre}</span>
                             <span className="text-[#39ff8f] shrink-0 font-bold">${Number(p.precioBase || 0).toLocaleString('es-CO')}</span>
                           </div>
                         ))
@@ -1191,14 +1192,6 @@ export const QuoteManager = () => (
   <ErrorBoundary>
     <AuthProvider>
       <QuoteManagerInner />
-    </AuthProvider>
-  </ErrorBoundary>
-);
-
-export const ProviderManager = () => (
-  <ErrorBoundary>
-    <AuthProvider>
-      <ProviderManagerInner />
     </AuthProvider>
   </ErrorBoundary>
 );
