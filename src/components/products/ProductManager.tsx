@@ -87,7 +87,7 @@ const ProductManagerInner: React.FC = () => {
     const service = activeTab === 'productos' ? productsService : servicesService;
     
     const dataToSave: any = {
-      nombre: formData.nombre,
+      nombre: formData.nombre.toUpperCase(),
       precioBase: parseFloat(formData.precioBase) || 0
     };
     if (activeTab === 'productos') dataToSave.imagenUrl = formData.imagenUrl;
@@ -195,7 +195,7 @@ const ProductManagerInner: React.FC = () => {
                     </div>
                   </td>
                   )}
-                  <td className={`p-4 font-medium text-white border-y border-white/5 group-hover:border-[#00A3E0]/30 transition-colors ${activeTab === 'servicios' ? 'rounded-l-xl border-l' : ''}`}>{item.nombre}</td>
+                  <td className={`p-4 font-medium text-white border-y border-white/5 group-hover:border-[#00A3E0]/30 transition-colors uppercase ${activeTab === 'servicios' ? 'rounded-l-xl border-l' : ''}`}>{item.nombre}</td>
                   <td className="p-4 text-[#39ff8f] font-bold border-y border-white/5 group-hover:border-[#00A3E0]/30 transition-colors">${Number(item.precioBase).toLocaleString('es-CO')}</td>
                   <td className="p-4 rounded-r-xl border-y border-r border-white/5 group-hover:border-[#00A3E0]/30 transition-colors">
                     <div className="flex items-center justify-center gap-2">
@@ -272,7 +272,8 @@ const ProductManagerInner: React.FC = () => {
               label={activeTab === 'productos' ? "Nombre del Producto" : "Nombre del Servicio"} 
               required 
               value={formData.nombre} 
-              onChange={e => setFormData({...formData, nombre: e.target.value})} 
+              onChange={e => setFormData({...formData, nombre: e.target.value.toUpperCase()})} 
+              style={{ textTransform: 'uppercase' }}
             />
             <CyberInput 
               label="Precio Base" 

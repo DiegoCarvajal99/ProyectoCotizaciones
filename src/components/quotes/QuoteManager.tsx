@@ -68,7 +68,17 @@ const QuoteManagerInner: React.FC = () => {
         productsService.getAll(profile.uid),
         servicesService.getAll(profile.uid)
       ]);
-      setQuotes(quotesData);
+      const sortedQuotes = [...quotesData].sort((a: any, b: any) => {
+        const numA = parseInt(String(a.numero || '0').replace(/\D/g, ''), 10);
+        const numB = parseInt(String(b.numero || '0').replace(/\D/g, ''), 10);
+        if (numA !== numB) {
+          return numB - numA;
+        }
+        const dateA = a.createdAt ? new Date(a.createdAt).getTime() : 0;
+        const dateB = b.createdAt ? new Date(b.createdAt).getTime() : 0;
+        return dateB - dateA;
+      });
+      setQuotes(sortedQuotes);
       setClients(clientsData);
       setProducts([
         ...productsData.map(p => ({ ...p, tipo: 'Producto' })), 
